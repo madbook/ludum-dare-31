@@ -157,21 +157,20 @@ $(function() {
 
     interact: function(obj, x, y) {
       if (!Shell.script) {
-        Shell.scriptParams.length = 0;
-        Shell.interactCell.x = x;
-        Shell.interactCell.y = y;
-
         if (obj.type === 'script' && Bin[obj.name]) {
+          Shell.setShellScript(Bin[obj.name], x, y);
+
           Shell.log('$', obj.name);
+          
           if (Bin[obj.name].help) {
             Shell.log(Bin[obj.name].help);
           }
-          Shell.script = Bin[obj.name];
+          
           return;
         } else if (obj.type === 'directory' || obj.type === 'linked_directory') {
-          Shell.script = Bin.cd;
+          Shell.setShellScript(Bin.cd, x, y);
         } else {
-          Shell.script = Bin.inspect;
+          Shell.setShellScript(Bin.inspect, x, y);
         }
       } else {
         var xOff = Math.abs(Shell.interactCell.x - x);
@@ -181,10 +180,7 @@ $(function() {
           Shell.interactCell.x = x;
           Shell.interactCell.y = y;
         } else {
-          Shell.script = null;
-          Shell.scriptParams.length = 0;
-          Shell.interactCell.x = null;
-          Shell.interactCell.y = null;
+          Shell.setShellScript(null);
           Shell.log('arguments must connect, aborting');
           return;
         }
@@ -196,18 +192,31 @@ $(function() {
         Shell.scriptParams.push(obj);
 
         if (Shell.scriptParams.length === Shell.script.arguments.length) {
-          Shell.log.apply(Shell, ['$', Shell.script.name].concat(Shell.scriptParams.map(function(obj) {
-            return obj.name;
-          })));
+          Shell.log.apply(Shell, 
+            ['$', Shell.script.name].concat(Shell.scriptParams.map(function(obj) {
+              return obj.name;
+            }))
+          );
           Shell.script.source.apply(Shell, Shell.scriptParams);
-          Shell.script = null;
-          Shell.scriptParams.length = 0;
+          Shell.setShellScript(null);
         }
       } else {
-        Shell.script = null;
-        Shell.scriptParams.length = 0;
+        Shell.setShellScript(null);
       }
-    }
+    },
+
+    setShellScript: function(obj, x, y) {
+      if (obj) {
+        Shell.script = obj;
+        Shell.interactCell.x = x;
+        Shell.interactCell.y = y;
+      } else {
+        Shell.script = null;
+        Shell.interactCell.x = null;
+        Shell.interactCell.y = null;
+      }
+      Shell.scriptParams.length = 0;
+    },
   }
 
   var App = React.createClass({
