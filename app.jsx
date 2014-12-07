@@ -1,6 +1,8 @@
 React.initializeTouchEvents(true);
 
 $(function() {
+  FastClick.attach(document.body);
+
   var mountNode = document.getElementById('app');
 
   var blankBoard = [];
@@ -204,7 +206,7 @@ $(function() {
           Shell.script.source.apply(Shell, Shell.scriptParams);
           Shell.setShellScript(null);
         }
-        
+
         Shell.refresh();
       } else {
         Shell.setShellScript(null);
