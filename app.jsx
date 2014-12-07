@@ -60,7 +60,7 @@ $(function() {
     'move': {
       name: 'move',
       arguments: [
-        ['file', 'encryption_key', 'encrypted_file'],
+        ['file', 'encryption_key', 'encrypted_file', 'host_key', 'host_file'],
         ['directory', 'linked_directory']
       ],
       source: function(file, target) {
@@ -85,6 +85,31 @@ $(function() {
         this.refresh();
       },
       help: 'move a file into another directory',
+    },
+
+    'remove': {
+      name: 'remove',
+      arguments: [
+        ['file'],
+      ],
+      source: function(file) {
+        if (!file.permission) {
+          this.log('permission denied');
+          sfx.play('cancel');
+          return;
+        }
+
+        var realFile = this.getSourceFile(file);
+        realFile.parent = null;
+        
+        var i = file.parent.listing.indexOf(file.name);
+        file.parent.data.splice(i, 1);
+        file.parent.listing.splice(i, 1);
+
+        file.parent = null;
+        sfx.play('remove');
+      },
+      help: 'remove a file',
     },
 
     'decrypt': {

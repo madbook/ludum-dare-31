@@ -1,0 +1,55 @@
+{
+  "type": "root_directory",
+  "name": "/",
+  "offset": 1,
+  "welcome": "welcome <USERNAME>. sometimes removing files is necessary.",
+  "data": [
+    {
+      "type": "script",
+      "name": "connect"
+    },
+    {
+      "type": "host_key",
+      "name": "key",
+      "permission": 1,
+      "data": "FOOBAR"
+    },
+    {
+      "type": "file",
+      "name": "readme",
+      "data": "the 'remove' script will delete files",
+      "permission": 0
+    },
+    {
+      "type": "script",
+      "name": "remove"
+    },
+    {
+      "type": "file",
+      "name": "todo",
+      "data": "remember to remove this file",
+      "permission": 1
+    },
+    {
+      "type": "directory",
+      "name": "keys/",
+      "data": [
+        {
+          "type": "host_file",
+          "name": "host",
+          "permission": 1,
+          "key_data": "FOOBAR",
+          "data": "level3.json"
+        },
+        {
+          "type": "script",
+          "name": "move"
+        },
+        {
+          "type": "script",
+          "name": "move"
+        }
+      ]
+    }
+  ]
+}
