@@ -11,6 +11,18 @@ $(function() {
   }
 
   var Bin = {
+    'inspect': {
+      name: 'inspect',
+      arguments: [
+        ['file', 'encrypted_file', 'key_file']
+      ],
+      source: function(file) {
+        this.log('name:', file.name);
+        this.log('type:', file.type);
+      },
+      help: 'usage: inspect <file>',
+    },
+
     'cd': {
       name: 'cd',
       arguments: [
@@ -126,12 +138,14 @@ $(function() {
             Shell.log(Bin[obj.name].help);
           }
           Shell.script = Bin[obj.name];
-          Shell.scriptParams.length = 0;
           return;
-        } else {
+        } else if (obj.type === 'directory' || obj.type === 'linked_directory') {
           Shell.script = Bin.cd;
-          Shell.scriptParams.length = 0;
+        } else {
+          Shell.script = Bin.inspect;
         }
+        
+        Shell.scriptParams.length = 0;
       }
 
       var argNum = Shell.scriptParams.length;
