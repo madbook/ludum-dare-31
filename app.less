@@ -11,9 +11,28 @@
 }
 
 .cell {
-  background: green;
-  border: 1px solid blue;
+  background: grey;
+  border: 1px solid green;
   flex: 0 0 25%;
+}
+
+.cell.linked_directory {
+  background: lightblue;
+}
+.cell.directory {
+  background: blue;
+}
+
+.cell.script {
+  background: black;
+}
+
+.cell.encrypted_file {
+  background: orange;
+}
+
+.cell.key_file {
+  background: yellow;
 }
 
 .cell-contents {

@@ -1,0 +1,28 @@
+{
+  "type": "root_directory",
+  "offset": 8,
+  "data": [
+    {
+      "type": "directory",
+      "name": "keys",
+      "data": [
+        {
+          "type": "key_file",
+          "name": "pub_key"
+        },
+        {
+          "type": "script",
+          "name": "move"
+        }
+      ]
+    },
+    {
+      "type": "script",
+      "name": "decrypt"
+    },
+    {
+      "type": "encrypted_file",
+      "name": "secret_data"
+    }
+  ]
+}
