@@ -25,7 +25,6 @@ $(function() {
           this.log(file.data);
         }
       },
-      help: 'usage: inspect <file>',
     },
 
     'cd': {
@@ -40,11 +39,10 @@ $(function() {
 
         this.changeDirectory(target);
       },
-      help: 'usage: cd <directory>',
     },
 
-    'mv': {
-      name: 'mv',
+    'move': {
+      name: 'move',
       arguments: [
         ['file', 'key_file', 'encrypted_file'],
         ['directory', 'linked_directory']
@@ -68,7 +66,7 @@ $(function() {
         target.listing.push(file.name);
         this.refresh();
       },
-      help: 'usage: mv <file> <directory>',
+      help: 'move a file into another directory',
     },
 
     'decrypt': {
@@ -97,7 +95,7 @@ $(function() {
 
         this.refresh();
       },
-      help: 'usage: decrypt <key_file> <encrypted_file>',
+      help: 'decrypt an encrypted file using a key',
     },
   };
 
