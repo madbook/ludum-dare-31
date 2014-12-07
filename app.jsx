@@ -231,8 +231,7 @@ $(function() {
       }
     },
   }
-
-  window.shell = Shell;
+  
 
   var App = React.createClass({
     getInitialState: function() {
