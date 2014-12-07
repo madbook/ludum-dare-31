@@ -1,22 +1,38 @@
+@background-color: #080A2C;
+@background-color-rgba-none: rgba(8, 10, 44, 0);
+@background-color-rgba-full: rgba(8, 10, 44, 1);
+
 * {
   box-sizing: border-box;
   -webkit-flex: 1 0;
   flex: 1 0;
-  
+  -webkit-user-select: none;
 }
+
+html {
+  display: flex;
+  background: @background-color;
+  height: 100%;
+}
+
+body {
+  display: -webkit-flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}  
 
 #app {
   width: 100%;
   position: relative;
   z-index: 2;
 
-  background: -moz-linear-gradient(top,  rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.9)), color-stop(100%,rgba(0,0,0,0)));
-  background: -webkit-linear-gradient(top,  rgba(0,0,0,0.9) 0%,rgba(0,0,0,0) 100%);
-  background: -o-linear-gradient(top,  rgba(0,0,0,0.9) 0%,rgba(0,0,0,0) 100%);
-  background: -ms-linear-gradient(top,  rgba(0,0,0,0.9) 0%,rgba(0,0,0,0) 100%);
-  background: linear-gradient(to bottom,  rgba(0,0,0,0.9) 0%,rgba(0,0,0,0) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6000000', endColorstr='#00000000',GradientType=0 );
+  background: -moz-linear-gradient(top,  @background-color-rgba-full 0%, @background-color-rgba-none 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,@background-color-rgba-full), color-stop(100%,@background-color-rgba-none));
+  background: -webkit-linear-gradient(top,  @background-color-rgba-full 0%,@background-color-rgba-none 100%);
+  background: -o-linear-gradient(top,  @background-color-rgba-full 0%,@background-color-rgba-none 100%);
+  background: -ms-linear-gradient(top,  @background-color-rgba-full 0%,@background-color-rgba-none 100%);
+  background: linear-gradient(to bottom,  @background-color-rgba-full 0%,@background-color-rgba-none 100%);
 }
 
 #console {
@@ -39,9 +55,10 @@
   color: white;
   font-family: "OCR A Std", monospace;
   font-size: xx-small;
-  width: 400px;
-  height: 400px;
-  background: black;
+  background: @background-color;
+  -webkit-flex: 0 0 400px;
+  flex: 0 0 400px;
+  overflow: hidden;
 }
 
 .board {

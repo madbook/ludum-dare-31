@@ -94,6 +94,9 @@ $(function() {
     log: function() {
       var preText = Shell.console.innerText;
       preText += Array.prototype.join.call(arguments, ' ') + '\n';
+      if (preText.length > 10000) {
+        preText = preText.slice(preText.length - 10000);
+      }
       Shell.console.innerText = preText;
     },
 
