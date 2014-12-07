@@ -126,6 +126,38 @@ $(function() {
       Shell.console.innerText = preText;
     },
 
+    relog: function() {
+      var preText = Shell.console.innerText;
+      
+      var i = preText.lastIndexOf('\n');
+      preText = preText.slice(0, i);
+      i = preText.lastIndexOf('\n');
+      preText = preText.slice(0, i + 1);
+
+      preText += Array.prototype.join.call(arguments, ' ') + '\n';
+      if (preText.length > 10000) {
+        preText = preText.slice(preText.length - 10000);
+      }
+      Shell.console.innerText = preText;
+    },
+
+    getScriptPath: function() {
+      var parts = ['$'];
+      if (Shell.script) {
+        parts.push(Shell.script.name);
+
+        for (var i = 0, l = Shell.script.arguments.length; i < l; i++) {
+          if (Shell.scriptParams[i]) {
+            parts.push(Shell.scriptParams[i].name);
+          } else {
+            parts.push('<' + Shell.script.arguments[i][0] + '>');
+          }
+        }
+      }
+      
+      return parts;
+    },
+
     clearDirectory: function() {
       var i = 16;
       while (i--) {
@@ -169,6 +201,7 @@ $(function() {
             Shell.log(Bin[obj.name].help);
           }
           
+          Shell.log.apply(Shell, Shell.getScriptPath());
           Shell.refresh();
           return;
         } else if (obj.type === 'directory' || obj.type === 'linked_directory') {
@@ -176,6 +209,7 @@ $(function() {
         } else {
           Shell.setShellScript(Bin.inspect, x, y);
         }
+        Shell.log('$')
       } else {
         var xOff = Math.abs(Shell.interactCell.x - x);
         var yOff = Math.abs(Shell.interactCell.y - y);
@@ -196,19 +230,16 @@ $(function() {
       if (Shell.script.arguments[argNum] && Shell.script.arguments[argNum].indexOf(obj.type) >= 0) {
         Shell.scriptParams.push(obj);
         Shell.selectedCellIndicies.push(y * 4 + x);
+        Shell.relog.apply(Shell, Shell.getScriptPath());
 
         if (Shell.scriptParams.length === Shell.script.arguments.length) {
-          Shell.log.apply(Shell, 
-            ['$', Shell.script.name].concat(Shell.scriptParams.map(function(obj) {
-              return obj.name;
-            }))
-          );
           Shell.script.source.apply(Shell, Shell.scriptParams);
           Shell.setShellScript(null);
         }
 
         Shell.refresh();
       } else {
+        Shell.log('invalid arguments');
         Shell.setShellScript(null);
         Shell.refresh();
       }
@@ -231,7 +262,7 @@ $(function() {
       }
     },
   }
-  
+
 
   var App = React.createClass({
     getInitialState: function() {
