@@ -19,6 +19,9 @@ $(function() {
       source: function(file) {
         this.log('name:', file.name);
         this.log('type:', file.type);
+        if (file.data) {
+          this.log(file.data);
+        }
       },
       help: 'usage: inspect <file>',
     },
@@ -41,7 +44,7 @@ $(function() {
     'mv': {
       name: 'mv',
       arguments: [
-        ['file', 'key_file'],
+        ['file', 'key_file', 'encrypted_file'],
         ['directory', 'linked_directory']
       ],
       source: function(file, target) {
@@ -67,12 +70,17 @@ $(function() {
         ['encrypted_file']
       ],
       source: function(key, file) {
+        var i = file.parent.listing.indexOf(file.name);
+        file = file.parent.data[i];
+
         this.log('decrypting', file.name);
+        if (file.data) {
+          file.data = atob(file.data);
+        }
         this.log('...');
+        file.type = 'file';
         this.log('...');
         this.log(file.name, 'decrypted.');
-        var i = file.parent.listing.indexOf(file.name);
-        file.parent.data[i].type = 'file';
         this.refresh();
       },
       help: 'usage: decrypt <key_file> <encrypted_file>',
@@ -88,6 +96,8 @@ $(function() {
     listing: blankBoard.slice(),
 
     script: null,
+
+    interactCell: { x: null, y: null },
 
     scriptParams: [],
 
@@ -133,8 +143,12 @@ $(function() {
       arr.forEach(function(cb) { cb(); });
     },
 
-    interact: function(obj) {
+    interact: function(obj, x, y) {
       if (!Shell.script) {
+        Shell.scriptParams.length = 0;
+        Shell.interactCell.x = x;
+        Shell.interactCell.y = y;
+
         if (obj.type === 'script' && Bin[obj.name]) {
           Shell.log('$', obj.name);
           if (Bin[obj.name].help) {
@@ -147,8 +161,21 @@ $(function() {
         } else {
           Shell.script = Bin.inspect;
         }
-        
-        Shell.scriptParams.length = 0;
+      } else {
+        var xOff = Math.abs(Shell.interactCell.x - x);
+        var yOff = Math.abs(Shell.interactCell.y - y);
+
+        if (xOff + yOff === 1) {
+          Shell.interactCell.x = x;
+          Shell.interactCell.y = y;
+        } else {
+          Shell.script = null;
+          Shell.scriptParams.length = 0;
+          Shell.interactCell.x = null;
+          Shell.interactCell.y = null;
+          Shell.log('arguments must connect, aborting');
+          return;
+        }
       }
 
       var argNum = Shell.scriptParams.length;
@@ -205,7 +232,9 @@ $(function() {
     },
 
     handleClick: function() {
-      Shell.interact(this.props);
+      var x = this.props.i % 4;
+      var y = (this.props.i - x) / 4 | 0;
+      Shell.interact(this.props, x, y);
     },
   });
   
@@ -216,8 +245,8 @@ $(function() {
       </div>;
     },
 
-    renderCell: function(cell) {
-      return <Cell {...cell} />;
+    renderCell: function(cell, i) {
+      return <Cell {...cell} i={i} />;
     },
   });
 
@@ -232,7 +261,7 @@ $(function() {
       
       // add ../ directory
       data.data.unshift({
-        name: '..',
+        name: '../',
         type: 'linked_directory',
         link: parent,
       });
@@ -241,7 +270,7 @@ $(function() {
     if (data.type === 'directory' || data.type === 'root_directory') {
 
       data.data.unshift({
-        name: '.',
+        name: './',
         type: 'linked_directory',
         link: data,
       });

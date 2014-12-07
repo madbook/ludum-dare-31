@@ -1,15 +1,21 @@
 {
   "type": "root_directory",
-  "name": "",
+  "name": "/",
   "offset": 8,
   "data": [
     {
-      "type": "script",
-      "name": "decrypt"
+      "type": "encrypted_file",
+      "name": "secrets",
+      "data": "Z29vZCBqb2Ih"
+    },
+    {
+      "type": "file",
+      "name": "readme",
+      "data": "try to decrypt the secrets file!"
     },
     {
       "type": "directory",
-      "name": "keys",
+      "name": "keys/",
       "data": [
         {
           "type": "key_file",
@@ -22,8 +28,8 @@
       ]
     },
     {
-      "type": "encrypted_file",
-      "name": "secrets"
+      "type": "script",
+      "name": "decrypt"
     }
   ]
 }
