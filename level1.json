@@ -2,11 +2,12 @@
   "type": "root_directory",
   "name": "/",
   "offset": 0,
+  "welcome": "welcome <USERNAME>. connection information for the next server is encrypted.",
   "data": [
     {
       "type": "encrypted_file",
       "name": "secrets",
-      "data": "eyJ0eXBlIjoiZGlyZWN0b3J5IiwibmFtZSI6InNzaC8iLCJkYXRhIjpbeyJ0eXBlIjoiZmlsZSIsIm5hbWUiOiJyZWFkbWUiLCJkYXRhIjoiZ29vZCBqb2IhIHVzZSB0aGUgc3NoIHNjcmlwdCB0byBnbyB0byB0aGUgbmV4dCBsZXZlbC4ifSx7InR5cGUiOiJzY3JpcHQiLCJuYW1lIjoic3NoIn0seyJ0eXBlIjoia2V5X2ZpbGUiLCJuYW1lIjoia2V5IiwicGVybWlzc2lvbiI6MX0seyJ0eXBlIjoiZmlsZSIsIm5hbWUiOiJob3N0IiwiZGF0YSI6ImxldmVsMiIsInBlcm1pc3Npb24iOjF9XX0=",
+      "data": "eyJ0eXBlIjoiZGlyZWN0b3J5IiwibmFtZSI6InNzaC8iLCJkYXRhIjpbeyJ0eXBlIjoiZmlsZSIsIm5hbWUiOiJyZWFkbWUiLCJkYXRhIjoiZ29vZCBqb2IhIHVzZSB0aGUgc3NoIHNjcmlwdCB0byBnbyB0byB0aGUgbmV4dCBsZXZlbC4ifSx7InR5cGUiOiJzY3JpcHQiLCJuYW1lIjoiY29ubmVjdCJ9LHsidHlwZSI6Imhvc3Rfa2V5IiwibmFtZSI6ImtleSIsImRhdGEiOiJORUlOTyIsInBlcm1pc3Npb24iOjF9LHsidHlwZSI6Imhvc3RfZmlsZSIsIm5hbWUiOiJob3N0Iiwia2V5X2RhdGEiOiJORUlOTyIsImRhdGEiOiJsZXZlbDIuanNvbiIsInBlcm1pc3Npb24iOjF9XX0=",
       "permission": 1
     },
     {

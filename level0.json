@@ -2,6 +2,7 @@
   "type": "root_directory",
   "name": "/",
   "offset": 6,
+  "welcome": "welcome <USERNAME>. start by connecting to the remote server.",
   "data": [
     {
       "type": "file",

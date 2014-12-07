@@ -142,6 +142,9 @@ $(function() {
       $.getJSON(path).then(function(data) {
         Shell.log('connected!');
         decorateLevelData(data, null);
+        if (data.welcome) {
+          Shell.log('SERVER:', data.welcome);
+        }
         Shell.changeDirectory(data);
       }).fail(function(err) {
         Shell.log('err! something went wrong!');
