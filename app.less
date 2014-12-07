@@ -68,6 +68,13 @@ body {
   border: 3px solid lighten(@background-color, 15%);
 }
 
+@media only screen and (orientation: portrait) {
+  #game {
+    -webkit-flex: 1 0;
+    flex: 1 0;
+  }
+}
+
 .board {
   display: -webkit-flex;
   display: flex;
