@@ -16,7 +16,7 @@ $(function() {
     'inspect': {
       name: 'inspect',
       arguments: [
-        ['file', 'encrypted_file', 'key_file']
+        ['file', 'encrypted_file', 'encryption_key']
       ],
       source: function(file) {
         this.log('name:', file.name);
@@ -44,7 +44,7 @@ $(function() {
     'move': {
       name: 'move',
       arguments: [
-        ['file', 'key_file', 'encrypted_file'],
+        ['file', 'encryption_key', 'encrypted_file'],
         ['directory', 'linked_directory']
       ],
       source: function(file, target) {
@@ -72,7 +72,7 @@ $(function() {
     'decrypt': {
       name: 'decrypt',
       arguments: [
-        ['key_file'],
+        ['encryption_key'],
         ['encrypted_file']
       ],
       source: function(key, file) {
@@ -97,6 +97,27 @@ $(function() {
       },
       help: 'decrypt an encrypted file using a key',
     },
+
+    'connect': {
+      name: 'connect',
+      arguments: [
+        ['host_key'],
+        ['host_file']
+      ],
+      source: function(key, host) {
+        this.log('resolving host', host.data);
+        this.log('authenticating...');
+
+        if (key.data !== host.key_data) {
+          this.log('incorrect key, disconnecting');
+        } else {
+          Shell.loadLevel(host.data);
+        }
+
+        this.refresh();
+      },
+      help: 'connect to a remote server',
+    },
   };
 
 
@@ -114,6 +135,22 @@ $(function() {
     selectedCellIndicies: [],
 
     scriptParams: [],
+
+    loadLevel: function(path) {
+      Shell.log('connecting to', path);
+      Shell.log('...');
+      $.getJSON(path).then(function(data) {
+        Shell.log('connected!');
+        decorateLevelData(data, null);
+        Shell.changeDirectory(data);
+      }).fail(function(err) {
+        Shell.log('err! something went wrong!');
+        Shell.log('this is not part of the game.  sorry!');
+        debugger;
+      });
+    },
+
+    onLoadLevelCallbacks: [],
 
     log: function() {
       var preText = Shell.console.innerText;
@@ -164,11 +201,15 @@ $(function() {
     },
 
     changeDirectory: function(directory) {
+      Shell.clearDirectory();
+      if (!directory) {
+        return;
+      }
+
       var l = directory.data.length;
       var offset = directory.offset;
       var i;
       
-      Shell.clearDirectory();
 
       while (l--) {
         i = (l + offset) % 16;
@@ -266,7 +307,7 @@ $(function() {
     getInitialState: function() {
       return {
         activeBoard: blankBoard.slice(),
-        activeDirectory: this.props.levelData,
+        activeDirectory: this.props.levelData || null,
       };
     },
     
@@ -357,15 +398,11 @@ $(function() {
       });
     }
   }
-
-  $.getJSON('level1.json').then(function(data) {
-    decorateLevelData(data, null);
-    React.render(
-      <App levelData={data} />,
-      mountNode
-    );
-  }).fail(function(err) {
-    debugger;
-  });
+  
+  React.render(
+    <App />,
+    mountNode
+  );
+  Shell.loadLevel('level0.json');
 
 });

@@ -1,0 +1,30 @@
+{
+  "type": "root_directory",
+  "name": "/",
+  "offset": 6,
+  "data": [
+    {
+      "type": "file",
+      "name": "readme",
+      "data": "use the 'connect' script with the 'host' file to log into the remote server",
+      "permission": 0
+    },
+    {
+      "type": "script",
+      "name": "connect"
+    },
+    {
+      "type": "host_key",
+      "name": "key",
+      "permission": 1,
+      "data": "ABCD"
+    },
+    {
+      "type": "host_file",
+      "name": "host",
+      "permission": 1,
+      "key_data": "ABCD",
+      "data": "level1.json"
+    }
+  ]
+}

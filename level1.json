@@ -30,7 +30,7 @@
           "name": "move"
         },
         {
-          "type": "key_file",
+          "type": "encryption_key",
           "name": "key",
           "permission": 1
         }
