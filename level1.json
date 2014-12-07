@@ -4,6 +4,10 @@
   "offset": 8,
   "data": [
     {
+      "type": "script",
+      "name": "decrypt"
+    },
+    {
       "type": "directory",
       "name": "keys",
       "data": [
@@ -16,10 +20,6 @@
           "name": "mv"
         }
       ]
-    },
-    {
-      "type": "script",
-      "name": "decrypt"
     },
     {
       "type": "encrypted_file",
