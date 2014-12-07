@@ -88,6 +88,8 @@ $(function() {
           file.parent.data[i] = newFile;
           decorateLevelData(newFile, file.parent);
           file.parent = null;
+          key = this.getSourceFile(key);
+          key.type = 'used_key';
           this.log(file.name, 'decrypted to', newFile.name);
         } catch(e) {
           this.log('could not decrypt file');    
@@ -135,6 +137,11 @@ $(function() {
     selectedCellIndicies: [],
 
     scriptParams: [],
+
+    getSourceFile: function(file) {
+      var i = file.parent.listing.indexOf(file.name);
+      return file.parent.data[i];
+    },
 
     loadLevel: function(path) {
       Shell.log('connecting to', path);
