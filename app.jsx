@@ -78,15 +78,21 @@ $(function() {
       source: function(key, file) {
         var i = file.parent.listing.indexOf(file.name);
         file = file.parent.data[i];
-
+        
         this.log('decrypting', file.name);
-        if (file.data) {
-          file.data = atob(file.data);
+        this.log('...');
+
+        try {
+          var newFile = atob(file.data);
+          newFile = JSON.parse(newFile);
+          file.parent.data[i] = newFile;
+          decorateLevelData(newFile, file.parent);
+          file.parent = null;
+          this.log(file.name, 'decrypted to', newFile.name);
+        } catch(e) {
+          this.log('could not decrypt file');    
         }
-        this.log('...');
-        file.type = 'file';
-        this.log('...');
-        this.log(file.name, 'decrypted.');
+
         this.refresh();
       },
       help: 'usage: decrypt <key_file> <encrypted_file>',
