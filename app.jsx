@@ -290,6 +290,10 @@ $(function() {
   });
 
   function decorateLevelData(data, parent) {
+    if (!data) {
+      return;
+    }
+
     if (parent && !data.parent) {
       data.parent = parent;
     }
@@ -316,7 +320,7 @@ $(function() {
 
     if (data.type === 'directory' || data.type === 'root_directory') {
       data.listing = data.data.map(function(child) {
-        return child.name;
+        return child ? child.name : null;
       });
 
       // call recursively
