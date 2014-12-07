@@ -97,10 +97,19 @@ body {
 .cell-icon {
   background-size: contain;
   position: absolute;
+  transition: all 0.1s;
+
   width: 60%;
   height: 60%;
   top: 20%;
   left: 20%;
+
+  .cell.selected & {
+    width: 70%;
+    height: 70%;
+    top: 15%;
+    left: 15%;
+  }
 }
 
 .icon-url(@url) {

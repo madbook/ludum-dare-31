@@ -111,6 +111,8 @@ $(function() {
 
     interactCell: { x: null, y: null },
 
+    selectedCellIndicies: [],
+
     scriptParams: [],
 
     log: function() {
@@ -159,13 +161,13 @@ $(function() {
       if (!Shell.script) {
         if (obj.type === 'script' && Bin[obj.name]) {
           Shell.setShellScript(Bin[obj.name], x, y);
-
           Shell.log('$', obj.name);
           
           if (Bin[obj.name].help) {
             Shell.log(Bin[obj.name].help);
           }
           
+          Shell.refresh();
           return;
         } else if (obj.type === 'directory' || obj.type === 'linked_directory') {
           Shell.setShellScript(Bin.cd, x, y);
@@ -182,6 +184,7 @@ $(function() {
         } else {
           Shell.setShellScript(null);
           Shell.log('arguments must connect, aborting');
+          Shell.refresh();
           return;
         }
       }
@@ -190,6 +193,7 @@ $(function() {
 
       if (Shell.script.arguments[argNum] && Shell.script.arguments[argNum].indexOf(obj.type) >= 0) {
         Shell.scriptParams.push(obj);
+        Shell.selectedCellIndicies.push(y * 4 + x);
 
         if (Shell.scriptParams.length === Shell.script.arguments.length) {
           Shell.log.apply(Shell, 
@@ -200,24 +204,33 @@ $(function() {
           Shell.script.source.apply(Shell, Shell.scriptParams);
           Shell.setShellScript(null);
         }
+        
+        Shell.refresh();
       } else {
         Shell.setShellScript(null);
+        Shell.refresh();
       }
+
     },
 
     setShellScript: function(obj, x, y) {
+      Shell.selectedCellIndicies.length = 0;
+      Shell.scriptParams.length = 0;
+
       if (obj) {
         Shell.script = obj;
         Shell.interactCell.x = x;
         Shell.interactCell.y = y;
+        Shell.selectedCellIndicies.push(y * 4 + x);
       } else {
         Shell.script = null;
         Shell.interactCell.x = null;
         Shell.interactCell.y = null;
       }
-      Shell.scriptParams.length = 0;
     },
   }
+
+  window.shell = Shell;
 
   var App = React.createClass({
     getInitialState: function() {
@@ -245,7 +258,8 @@ $(function() {
 
   var Cell = React.createClass({
     render: function() {
-      return <a className={'cell ' + this.props.type}
+
+      return <a className={'cell ' + this.props.type + (this.props.selected ? ' selected' : '')}
                 onClick={this.handleClick}>
         <canvas className="cell-contents" width="100" height="100" />
         <div className="cell-icon" />
@@ -268,7 +282,8 @@ $(function() {
     },
 
     renderCell: function(cell, i) {
-      return <Cell {...cell} i={i} />;
+      var selected = Shell.selectedCellIndicies.indexOf(i) > -1;
+      return <Cell {...cell} i={i} selected={selected} />;
     },
   });
 
