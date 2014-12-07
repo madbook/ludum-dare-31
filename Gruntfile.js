@@ -13,6 +13,8 @@ module.exports = function(grunt) {
       combined_file_output: {
         files: {
           'build/app.js': [
+            'sound-effect-manager-shim.js',
+            'node_modules/sound-effect-manager/sound-effect-manager.js',
             'app.jsx',
           ],
         },

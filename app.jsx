@@ -3,6 +3,20 @@ React.initializeTouchEvents(true);
 $(function() {
   FastClick.attach(document.body);
 
+  var sfx = new SoundEffectManager();
+
+  // load some files by passing it a url and a name
+  sfx.loadFile('sounds/cancel.wav', 'cancel');
+  sfx.loadFile('sounds/cd.wav', 'cd');
+  sfx.loadFile('sounds/connect.wav', 'connect');
+  sfx.loadFile('sounds/create.wav', 'create');
+  sfx.loadFile('sounds/decrypt.wav', 'decrypt');
+  sfx.loadFile('sounds/look.wav', 'look');
+  sfx.loadFile('sounds/move.wav', 'move');
+  sfx.loadFile('sounds/remove.wav', 'remove');
+  sfx.loadFile('sounds/select.wav', 'select');
+
+
   var mountNode = document.getElementById('app');
 
   var blankBoard = [];
@@ -24,6 +38,7 @@ $(function() {
         if (file.data) {
           this.log(file.data);
         }
+        sfx.play('look');
       },
     },
 
@@ -38,6 +53,7 @@ $(function() {
         }
 
         this.changeDirectory(target);
+        sfx.play('cd');
       },
     },
 
@@ -50,6 +66,7 @@ $(function() {
       source: function(file, target) {
         if (!file.permission) {
           this.log('permission denied');
+          sfx.play('cancel');
           return;
         }
 
@@ -64,6 +81,7 @@ $(function() {
         file.parent = target;
         target.data.push(file);
         target.listing.push(file.name);
+        sfx.play('move');
         this.refresh();
       },
       help: 'move a file into another directory',
@@ -91,8 +109,10 @@ $(function() {
           key = this.getSourceFile(key);
           key.type = 'used_key';
           this.log(file.name, 'decrypted to', newFile.name);
+          sfx.play('decrypt');
         } catch(e) {
           this.log('could not decrypt file');    
+          sfx.play('cancel');
         }
 
         this.refresh();
@@ -111,6 +131,7 @@ $(function() {
         this.log('authenticating...');
 
         if (key.data !== host.key_data) {
+          sfx.play('cancel');
           this.log('incorrect key, disconnecting');
         } else {
           Shell.loadLevel(host.data);
@@ -144,6 +165,7 @@ $(function() {
     },
 
     loadLevel: function(path) {
+      sfx.play('connect');
       Shell.log('connecting to', path);
       Shell.log('...');
       $.getJSON(path).then(function(data) {
@@ -251,6 +273,7 @@ $(function() {
           }
           
           Shell.log.apply(Shell, Shell.getScriptPath());
+          sfx.play('select');
           Shell.refresh();
           return;
         } else if (obj.type === 'directory' || obj.type === 'linked_directory') {
@@ -269,6 +292,7 @@ $(function() {
         } else {
           Shell.setShellScript(null);
           Shell.log('arguments must connect, aborting');
+          sfx.play('cancel');
           Shell.refresh();
           return;
         }
@@ -284,11 +308,14 @@ $(function() {
         if (Shell.scriptParams.length === Shell.script.arguments.length) {
           Shell.script.source.apply(Shell, Shell.scriptParams);
           Shell.setShellScript(null);
+        } else {
+          sfx.play('select');
         }
 
         Shell.refresh();
       } else {
         Shell.log('invalid arguments');
+        sfx.play('cancel');
         Shell.setShellScript(null);
         Shell.refresh();
       }
