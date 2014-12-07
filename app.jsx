@@ -239,6 +239,7 @@ $(function() {
       return <a className={'cell ' + this.props.type}
                 onClick={this.handleClick}>
         <canvas className="cell-contents" width="100" height="100" />
+        <div className="cell-icon" />
         <div className="cell-name">{this.props.name}</div>
       </a>;
     },

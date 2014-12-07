@@ -77,7 +77,6 @@ body {
 }
 
 .cell {
-  background-size: contain;
   -webkit-flex: 0 0 25%;
   flex: 0 0 25%;
   position: relative;
@@ -92,35 +91,50 @@ body {
 .cell-name {
   position: absolute;
   width: 100%;
-  top: 40%;
+  top: 80%;
+}
+
+.cell-icon {
+  background-size: contain;
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  top: 20%;
+  left: 20%;
+}
+
+.icon-url(@url) {
+  .cell-icon {
+    background-image: url(@url);
+  }
 }
 
 .cell.linked_directory {
-  background-image: url(../images/linked_directory.png);
+  .icon-url('../images/linked_directory.png');
   color: #00FFFC;
 }
 .cell.directory {
-  background-image: url(../images/directory.png);
+  .icon-url('../images/directory.png');
   color: #00FF0D;
 }
 
 .cell.script {
-  background-image: url(../images/script.png);
+  .icon-url('../images/script.png');
   color: #FF5837;
 }
 
 .cell.file {
-  background-image: url(../images/file.png);
+  .icon-url('../images/file.png');
   color: #EAEAEA;
 }
 
 .cell.encrypted_file {
-  background-image: url(../images/encrypted_file.png);
+  .icon-url('../images/encrypted_file.png');
   color: #FFDA56;
 }
 
 .cell.key_file {
-  background-image: url(../images/key_file.png);
+  .icon-url('../images/key_file.png');
   color: #FFDA56;
 }
 
