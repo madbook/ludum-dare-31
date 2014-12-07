@@ -11,8 +11,8 @@ $(function() {
   }
 
   var Bin = {
-    'change_directory': {
-      name: 'change_directory',
+    'cd': {
+      name: 'cd',
       arguments: [
         ['directory', 'linked_directory']
       ],
@@ -22,11 +22,12 @@ $(function() {
         }
 
         this.changeDirectory(target);
-      }
+      },
+      help: 'usage: cd <directory>',
     },
 
-    'move': {
-      name: 'move',
+    'mv': {
+      name: 'mv',
       arguments: [
         ['file', 'key_file'],
         ['directory', 'linked_directory']
@@ -43,7 +44,8 @@ $(function() {
         target.data.push(file);
         target.listing.push(file.name);
         this.refresh();
-      }
+      },
+      help: 'usage: mv <file> <directory>',
     },
 
     'decrypt': {
@@ -53,21 +55,35 @@ $(function() {
         ['encrypted_file']
       ],
       source: function(key, file) {
+        this.log('decrypting', file.name);
+        this.log('...');
+        this.log('...');
+        this.log(file.name, 'decrypted.');
         var i = file.parent.listing.indexOf(file.name);
         file.parent.data[i].type = 'file';
         this.refresh();
-      }
-    }
+      },
+      help: 'usage: decrypt <key_file> <encrypted_file>',
+    },
   };
+
 
   var Shell = {
     directory: null,
+    
+    console: document.getElementById('console'),
 
     listing: blankBoard.slice(),
 
     script: null,
 
     scriptParams: [],
+
+    log: function() {
+      var preText = Shell.console.innerText;
+      preText += Array.prototype.join.call(arguments, ' ') + '\n';
+      Shell.console.innerText = preText;
+    },
 
     clearDirectory: function() {
       var i = 16;
@@ -103,42 +119,38 @@ $(function() {
     },
 
     interact: function(obj) {
-      console.log('interacting with ' + obj.type);
-      
       if (!Shell.script) {
         if (obj.type === 'script' && Bin[obj.name]) {
-          console.log('setting script to ' + obj.name);
+          Shell.log('$', obj.name);
+          if (Bin[obj.name].help) {
+            Shell.log(Bin[obj.name].help);
+          }
           Shell.script = Bin[obj.name];
           Shell.scriptParams.length = 0;
-          console.log('');
           return;
         } else {
-          console.log('setting default script to change_directory');
-          Shell.script = Bin.change_directory;
+          Shell.script = Bin.cd;
           Shell.scriptParams.length = 0;
         }
       }
 
       var argNum = Shell.scriptParams.length;
-      console.log('checking argument number ' + argNum)
 
       if (Shell.script.arguments[argNum] && Shell.script.arguments[argNum].indexOf(obj.type) >= 0) {
         Shell.scriptParams.push(obj);
-        console.log('argument valid, adding to param list');
 
         if (Shell.scriptParams.length === Shell.script.arguments.length) {
-          console.log('param list complete, calling method ' + Shell.script.name);
+          Shell.log.apply(Shell, ['$', Shell.script.name].concat(Shell.scriptParams.map(function(obj) {
+            return obj.name;
+          })));
           Shell.script.source.apply(Shell, Shell.scriptParams);
           Shell.script = null;
           Shell.scriptParams.length = 0;
         }
       } else {
-        console.log('argument not valid, aborting');
         Shell.script = null;
         Shell.scriptParams.length = 0;
       }
-
-      console.log('');
     }
   }
 

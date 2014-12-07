@@ -2,13 +2,52 @@
   box-sizing: border-box;
   -webkit-flex: 1 0;
   flex: 1 0;
+  
+}
+
+#app {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+
+  background: -moz-linear-gradient(top,  rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.9)), color-stop(100%,rgba(0,0,0,0)));
+  background: -webkit-linear-gradient(top,  rgba(0,0,0,0.9) 0%,rgba(0,0,0,0) 100%);
+  background: -o-linear-gradient(top,  rgba(0,0,0,0.9) 0%,rgba(0,0,0,0) 100%);
+  background: -ms-linear-gradient(top,  rgba(0,0,0,0.9) 0%,rgba(0,0,0,0) 100%);
+  background: linear-gradient(to bottom,  rgba(0,0,0,0.9) 0%,rgba(0,0,0,0) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6000000', endColorstr='#00000000',GradientType=0 );
+}
+
+#console {
+  pointer-events: none;
+  z-index: 1;
+  width: 100%;
+  white-space: pre-wrap;
+  padding: 5px;
+  line-height: 1.2em;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  font-family: inherit;
+  opacity: 0.4;
+}
+
+#game {
+  position: relative;
+  color: white;
+  font-family: "OCR A Std", monospace;
+  font-size: xx-small;
+  width: 400px;
+  height: 400px;
+  background: black;
 }
 
 .board {
   display: flex;
   flex-wrap: wrap;
-  width: 400px;
-  background: black;
+  width: 100%;
 }
 
 .cell {
@@ -16,16 +55,17 @@
   flex: 0 0 25%;
   position: relative;
   text-align: center;
-  color: white;
   cursor: pointer;
+
+  canvas {
+    display: block;
+  }
 }
 
 .cell-name {
   position: absolute;
   width: 100%;
   top: 40%;
-  font-family: "OCR A Std", monospace;
-  font-size: xx-small;
 }
 
 .cell.linked_directory {

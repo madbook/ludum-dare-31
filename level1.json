@@ -13,7 +13,7 @@
         },
         {
           "type": "script",
-          "name": "move"
+          "name": "mv"
         }
       ]
     },
