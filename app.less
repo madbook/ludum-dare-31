@@ -86,6 +86,10 @@ body {
   canvas {
     display: block;
   }
+
+  &.selected {
+    background: rgba(255,255,255,0.05);
+  }
 }
 
 .cell-name {
@@ -94,21 +98,28 @@ body {
   top: 80%;
 }
 
+.icon-size(@size) {
+  @offset: (100% - @size) / 2;
+
+  width: @size;
+  height: @size;
+  top: @offset;
+  left: @offset;
+}
+
 .cell-icon {
   background-size: contain;
   position: absolute;
   transition: all 0.1s;
 
-  width: 60%;
-  height: 60%;
-  top: 20%;
-  left: 20%;
+  .icon-size(60%);
+
+  .cell:hover & {
+    .icon-size(80%);
+  }
 
   .cell.selected & {
-    width: 70%;
-    height: 70%;
-    top: 15%;
-    left: 15%;
+    .icon-size(70%);
   }
 }
 
