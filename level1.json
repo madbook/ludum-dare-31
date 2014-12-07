@@ -1,29 +1,38 @@
 {
   "type": "root_directory",
   "name": "/",
-  "offset": 8,
+  "offset": 0,
   "data": [
     {
       "type": "encrypted_file",
       "name": "secrets",
-      "data": "Z29vZCBqb2Ih"
+      "data": "Z29vZCBqb2Ih",
+      "permission": 1
     },
     {
       "type": "file",
       "name": "readme",
-      "data": "try to decrypt the secrets file!"
+      "data": "try to decrypt the secrets file!",
+      "permission": 0
     },
     {
       "type": "directory",
       "name": "keys/",
       "data": [
         {
-          "type": "key_file",
-          "name": "key"
+          "type": "file",
+          "name": "readme",
+          "data": "all program arguments must be orthogonally adjacent",
+          "permission": 0
         },
         {
           "type": "script",
           "name": "mv"
+        },
+        {
+          "type": "key_file",
+          "name": "key",
+          "permission": 1
         }
       ]
     },

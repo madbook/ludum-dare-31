@@ -48,11 +48,17 @@ $(function() {
         ['directory', 'linked_directory']
       ],
       source: function(file, target) {
+        if (!file.permission) {
+          this.log('permission denied');
+          return;
+        }
+
         if (target.type === 'linked_directory') {
           target = target.link;
         }
-        
+          
         var i = file.parent.listing.indexOf(file.name);
+
         file.parent.data.splice(i, 1);
         file.parent.listing.splice(i, 1);
         file.parent = target;
@@ -255,6 +261,14 @@ $(function() {
       data.parent = parent;
     }
 
+    if (data.type === 'directory' || data.type === 'root_directory') {
+      data.data.unshift({
+        name: './',
+        type: 'linked_directory',
+        link: data,
+      });
+    }
+
     if (data.type === 'directory' && parent) {
       // set offset for child directories
       data.offset = parent.offset + parent.data.indexOf(data);
@@ -268,13 +282,6 @@ $(function() {
     }
 
     if (data.type === 'directory' || data.type === 'root_directory') {
-
-      data.data.unshift({
-        name: './',
-        type: 'linked_directory',
-        link: data,
-      });
-
       data.listing = data.data.map(function(child) {
         return child.name;
       });
