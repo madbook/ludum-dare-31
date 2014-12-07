@@ -232,13 +232,20 @@ $(function() {
       
       // add ../ directory
       data.data.unshift({
-        name: '../',
+        name: '..',
         type: 'linked_directory',
         link: parent,
       });
     }
 
     if (data.type === 'directory' || data.type === 'root_directory') {
+
+      data.data.unshift({
+        name: '.',
+        type: 'linked_directory',
+        link: data,
+      });
+
       data.listing = data.data.map(function(child) {
         return child.name;
       });
