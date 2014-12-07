@@ -8,35 +8,53 @@
   display: flex;
   flex-wrap: wrap;
   width: 400px;
-}
-
-.cell {
-  background: grey;
-  border: 1px solid green;
-  flex: 0 0 25%;
-}
-
-.cell.linked_directory {
-  background: lightblue;
-}
-.cell.directory {
-  background: blue;
-}
-
-.cell.script {
   background: black;
 }
 
+.cell {
+  background-size: contain;
+  flex: 0 0 25%;
+  position: relative;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+}
+
+.cell-name {
+  position: absolute;
+  width: 100%;
+  top: 40%;
+  font-family: "OCR A Std", monospace;
+  font-size: xx-small;
+}
+
+.cell.linked_directory {
+  background-image: url(../images/linked_directory.png);
+  color: #00FFFC;
+}
+.cell.directory {
+  background-image: url(../images/directory.png);
+  color: #00FF0D;
+}
+
+.cell.script {
+  background-image: url(../images/script.png);
+  color: #FF5837;
+}
+
 .cell.file {
-  background: white;
+  background-image: url(../images/file.png);
+  color: #EAEAEA;
 }
 
 .cell.encrypted_file {
-  background: orange;
+  background-image: url(../images/encrypted_file.png);
+  color: #FFDA56;
 }
 
 .cell.key_file {
-  background: yellow;
+  background-image: url(../images/key_file.png);
+  color: #FFDA56;
 }
 
 .cell-contents {

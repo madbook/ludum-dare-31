@@ -9,7 +9,7 @@
       "data": [
         {
           "type": "key_file",
-          "name": "pub_key"
+          "name": "key"
         },
         {
           "type": "script",
@@ -23,7 +23,7 @@
     },
     {
       "type": "encrypted_file",
-      "name": "secret_data"
+      "name": "secrets"
     }
   ]
 }
