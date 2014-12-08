@@ -1,0 +1,39 @@
+{
+  "type": "root_directory",
+  "name": "/",
+  "offset": 10,
+  "welcome": "welcome <USERNAME>. adding files can be useful.",
+  "data": [
+    {
+      "type": "file",
+      "name": "readme",
+      "data": "the 'add' script will create new files",
+      "permission": 0
+    },
+    {
+      "type": "host_key",
+      "name": "key",
+      "permission": 1,
+      "data": "RAESDNEI"
+    },
+    {
+      "type": "script",
+      "name": "connect"
+    },
+    {
+      "type": "host_file",
+      "name": "host",
+      "permission": 1,
+      "key_data": "RAESDNEI",
+      "data": "level3"
+    },
+    {
+      "type": "script",
+      "name": "move"
+    },
+    {
+      "type": "script",
+      "name": "add"
+    }
+  ]
+}

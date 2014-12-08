@@ -112,6 +112,26 @@ $(function() {
       help: 'remove a file',
     },
 
+    'add': {
+      name: 'add',
+      arguments: [],
+      source: function() {
+        if (this.directory.listing.length >= 16) {
+          this.log('directory full');
+          sfx.play('cancel');
+          return;
+        }
+
+        var newFile = { name: 'blank', type: 'file' }
+        decorateLevelData(newFile, this.directory);
+        this.directory.listing.push(newFile.name);
+        this.directory.data.push(newFile);
+        sfx.play('create');
+        this.log('created new file');
+        this.refresh();
+      },
+    },
+
     'decrypt': {
       name: 'decrypt',
       arguments: [
@@ -298,7 +318,13 @@ $(function() {
           }
           
           Shell.log.apply(Shell, Shell.getScriptPath());
-          sfx.play('select');
+          if (Shell.script.arguments.length === 0) {
+            Shell.script.source.call(Shell);
+            Shell.setShellScript(null);
+          } else {
+            sfx.play('select');
+          }
+
           Shell.refresh();
           return;
         } else if (obj.type === 'directory' || obj.type === 'linked_directory') {
