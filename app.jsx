@@ -206,7 +206,7 @@ $(function() {
     
     levelPath: null,
 
-    console: document.getElementById('console'),
+    console: document.getElementById('game-console'),
 
     listing: blankBoard.slice(),
 
@@ -245,12 +245,12 @@ $(function() {
     onLoadLevelCallbacks: [],
 
     log: function() {
-      var preText = Shell.console.innerText;
+      var preText = Shell.console.textContent;
       preText += Array.prototype.join.call(arguments, ' ') + '\n';
       if (preText.length > 10000) {
         preText = preText.slice(preText.length - 10000);
       }
-      Shell.console.innerText = preText;
+      Shell.console.textContent = preText;
     },
 
     relog: function() {
