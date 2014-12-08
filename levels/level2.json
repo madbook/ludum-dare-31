@@ -32,7 +32,7 @@
     },
     {
       "type": "directory",
-      "name": "keys/",
+      "name": "hosts/",
       "data": [
         {
           "type": "host_file",
