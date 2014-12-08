@@ -206,7 +206,7 @@ $(function() {
     
     levelPath: null,
 
-    console: document.getElementById('game-console'),
+    console: document.getElementById('console'),
 
     listing: blankBoard.slice(),
 
