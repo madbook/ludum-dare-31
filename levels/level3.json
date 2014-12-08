@@ -7,7 +7,7 @@
     {
       "type": "file",
       "name": "readme",
-      "data": "the 'add' script will create new files",
+      "data": "the 'add' script will create new files.\nnew files are inserted directly after the script.",
       "permission": 0
     },
     {

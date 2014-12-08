@@ -122,10 +122,13 @@ $(function() {
           return;
         }
 
+        var i = this.scriptObj.parent.listing.indexOf(this.scriptObj);
         var newFile = { name: 'blank', type: 'file' }
         decorateLevelData(newFile, this.directory);
-        this.directory.listing.push(newFile.name);
-        this.directory.data.push(newFile);
+        this.directory.data.splice(i, 0, newFile);
+        this.directory.listing.splice(i, 0, newFile.name);
+        // this.directory.listing.push(newFile.name);
+        // this.directory.data.push(newFile);
         sfx.play('create');
         this.log('created new file');
         this.refresh();
@@ -322,19 +325,21 @@ $(function() {
     interact: function(obj, x, y) {
       if (!Shell.script) {
         if ((obj.type === 'script' || obj.type === 'user_script')  && Bin[obj.name]) {
-          Shell.setShellScript(Bin[obj.name], x, y);
-          Shell.log('$', obj.name);
+          Shell.setShellScript(Bin[obj.name], x, y, obj);
           
-          if (Bin[obj.name].help) {
-            Shell.log(Bin[obj.name].help);
-          }
-          
-          Shell.log.apply(Shell, Shell.getScriptPath());
           if (Shell.script.arguments.length === 0) {
+            Shell.log.apply(Shell, Shell.getScriptPath());
             Shell.script.source.call(Shell);
             Shell.setShellScript(null);
           } else {
+            Shell.log('$', obj.name);
+
+            if (Bin[obj.name].help) {
+              Shell.log(Bin[obj.name].help);
+            }
+
             sfx.play('select');
+            Shell.log.apply(Shell, Shell.getScriptPath());
           }
 
           Shell.refresh();
@@ -385,17 +390,19 @@ $(function() {
 
     },
 
-    setShellScript: function(obj, x, y) {
+    setShellScript: function(script, x, y, obj) {
       Shell.selectedCellIndicies.length = 0;
       Shell.scriptParams.length = 0;
 
-      if (obj) {
-        Shell.script = obj;
+      if (script) {
+        Shell.script = script;
+        Shell.scriptObj = obj;
         Shell.interactCell.x = x;
         Shell.interactCell.y = y;
         Shell.selectedCellIndicies.push(y * 4 + x);
       } else {
         Shell.script = null;
+        Shell.scriptObj = null;
         Shell.interactCell.x = null;
         Shell.interactCell.y = null;
       }
