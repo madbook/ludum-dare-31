@@ -7,7 +7,7 @@
     {
       "type": "encrypted_file",
       "name": "secrets",
-      "data": "eyJ0eXBlIjoiZGlyZWN0b3J5IiwibmFtZSI6InNzaC8iLCJkYXRhIjpbeyJ0eXBlIjoiZmlsZSIsIm5hbWUiOiJyZWFkbWUiLCJkYXRhIjoiZ29vZCBqb2IhIHVzZSB0aGUgc3NoIHNjcmlwdCB0byBnbyB0byB0aGUgbmV4dCBsZXZlbC4ifSx7InR5cGUiOiJzY3JpcHQiLCJuYW1lIjoiY29ubmVjdCJ9LHsidHlwZSI6Imhvc3Rfa2V5IiwibmFtZSI6ImtleSIsImRhdGEiOiJORUlOTyIsInBlcm1pc3Npb24iOjF9LHsidHlwZSI6Imhvc3RfZmlsZSIsIm5hbWUiOiJob3N0Iiwia2V5X2RhdGEiOiJORUlOTyIsImRhdGEiOiJsZXZlbDIuanNvbiIsInBlcm1pc3Npb24iOjF9XX0=",
+      "data": "eyJ0eXBlIjoiZGlyZWN0b3J5IiwibmFtZSI6InNzaC8iLCJkYXRhIjpbeyJ0eXBlIjoiZmlsZSIsIm5hbWUiOiJyZWFkbWUiLCJkYXRhIjoiZ29vZCBqb2IhIHVzZSB0aGUgc3NoIHNjcmlwdCB0byBnbyB0byB0aGUgbmV4dCBsZXZlbC4ifSx7InR5cGUiOiJzY3JpcHQiLCJuYW1lIjoiY29ubmVjdCJ9LHsidHlwZSI6Imhvc3Rfa2V5IiwibmFtZSI6ImtleSIsImRhdGEiOiJORUlOTyIsInBlcm1pc3Npb24iOjF9LHsidHlwZSI6Imhvc3RfZmlsZSIsIm5hbWUiOiJob3N0Iiwia2V5X2RhdGEiOiJORUlOTyIsImRhdGEiOiJsZXZlbDIiLCJwZXJtaXNzaW9uIjoxfV19",
       "permission": 1
     },
     {

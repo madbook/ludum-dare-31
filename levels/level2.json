@@ -39,7 +39,7 @@
           "name": "host",
           "permission": 1,
           "key_data": "FOOBAR",
-          "data": "level3.json"
+          "data": "level3"
         },
         {
           "type": "script",

@@ -193,7 +193,7 @@ $(function() {
       sfx.play('connect');
       Shell.log('connecting to', path);
       Shell.log('...');
-      $.getJSON(path).then(function(data) {
+      $.getJSON('levels/' + path + '.json').then(function(data) {
         Shell.log('connected!');
         decorateLevelData(data, null);
         if (data.welcome) {
@@ -465,6 +465,6 @@ $(function() {
     <App />,
     mountNode
   );
-  Shell.loadLevel('level0.json');
+  Shell.loadLevel('level0');
 
 });

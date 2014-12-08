@@ -25,7 +25,7 @@
       "name": "host",
       "permission": 1,
       "key_data": "ABCD",
-      "data": "level1.json"
+      "data": "level1"
     }
   ]
 }
