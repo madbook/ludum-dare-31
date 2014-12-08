@@ -45,10 +45,10 @@ $(function() {
     'cd': {
       name: 'cd',
       arguments: [
-        ['directory', 'linked_directory']
+        ['directory', 'linked_directory', 'linked_directory_parent']
       ],
       source: function(target) {
-        if (target.type === 'linked_directory') {
+        if (target.type === 'linked_directory' || target.type === 'linked_directory_parent') {
           target = target.link;
         }
 
@@ -61,7 +61,7 @@ $(function() {
       name: 'move',
       arguments: [
         ['file', 'encryption_key', 'encrypted_file', 'host_key', 'host_file'],
-        ['directory', 'linked_directory']
+        ['directory', 'linked_directory', 'linked_directory_parent']
       ],
       source: function(file, target) {
         if (!file.permission) {
@@ -70,7 +70,7 @@ $(function() {
           return;
         }
 
-        if (target.type === 'linked_directory') {
+        if (target.type === 'linked_directory' || target.type === 'linked_directory_parent') {
           target = target.link;
         }
           
@@ -344,7 +344,7 @@ $(function() {
 
           Shell.refresh();
           return;
-        } else if (obj.type === 'directory' || obj.type === 'linked_directory') {
+        } else if (obj.type === 'directory' || obj.type === 'linked_directory' || obj.type === 'linked_directory_parent') {
           Shell.setShellScript(Bin.cd, x, y);
         } else {
           Shell.setShellScript(Bin.inspect, x, y);
@@ -495,7 +495,7 @@ $(function() {
       // add ../ directory
       data.data.unshift({
         name: '../',
-        type: 'linked_directory',
+        type: 'linked_directory_parent',
         link: parent,
       });
     }
