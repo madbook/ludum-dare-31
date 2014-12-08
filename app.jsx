@@ -254,7 +254,7 @@ $(function() {
     },
 
     relog: function() {
-      var preText = Shell.console.innerText;
+      var preText = Shell.console.textContent;
       
       var i = preText.lastIndexOf('\n');
       preText = preText.slice(0, i);
@@ -265,7 +265,7 @@ $(function() {
       if (preText.length > 10000) {
         preText = preText.slice(preText.length - 10000);
       }
-      Shell.console.innerText = preText;
+      Shell.console.textContent = preText;
     },
 
     getScriptPath: function() {
