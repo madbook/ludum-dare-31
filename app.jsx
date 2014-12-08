@@ -186,12 +186,23 @@ $(function() {
       },
       help: 'connect to a remote server',
     },
+
+    'reload': {
+      name: 'reload',
+      arguments: [],
+      source: function() {
+        this.log('reconnecting to host');
+        this.loadLevel(this.levelPath);
+      },
+    }
   };
 
 
   var Shell = {
     directory: null,
     
+    levelPath: null,
+
     console: document.getElementById('console'),
 
     listing: blankBoard.slice(),
@@ -210,6 +221,7 @@ $(function() {
     },
 
     loadLevel: function(path) {
+      Shell.levelPath = path;
       sfx.play('connect');
       Shell.log('connecting to', path);
       Shell.log('...');
@@ -309,7 +321,7 @@ $(function() {
 
     interact: function(obj, x, y) {
       if (!Shell.script) {
-        if (obj.type === 'script' && Bin[obj.name]) {
+        if ((obj.type === 'script' || obj.type === 'user_script')  && Bin[obj.name]) {
           Shell.setShellScript(Bin[obj.name], x, y);
           Shell.log('$', obj.name);
           
@@ -390,6 +402,9 @@ $(function() {
     },
   }
 
+  var userScripts = [
+    { type: 'user_script', name: 'reload' },
+  ];
 
   var App = React.createClass({
     getInitialState: function() {
@@ -405,7 +420,10 @@ $(function() {
     },
 
     render: function() {
-      return <Board cells={this.state.activeBoard} />;
+      return <div className="screen">
+        <Board className="user-scripts" cells={userScripts} />
+        <Board className="shell" cells={this.state.activeBoard} />
+      </div>
     },
 
     onShellDirectoryChange: function() {
@@ -435,7 +453,7 @@ $(function() {
   
   var Board = React.createClass({
     render: function() {
-      return <div className="board">
+      return <div className={'board ' + this.props.className}>
         {this.props.cells.map(this.renderCell)}
       </div>;
     },
