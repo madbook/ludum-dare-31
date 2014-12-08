@@ -4,5 +4,10 @@
   "offset": 10,
   "welcome": "welcome <USERNAME>. you beat all of the levels I had time to create. congrats!",
   "data": [
+    {
+      "type": "file",
+      "name": "credits",
+      "data": "\neverything: matt lee\n\nthanks for playing!\n\n- matt"
+    }
   ]
 }
