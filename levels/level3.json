@@ -25,7 +25,7 @@
       "name": "host",
       "permission": 1,
       "key_data": "RAESDNEI",
-      "data": "level3"
+      "data": "gameover"
     },
     {
       "type": "script",

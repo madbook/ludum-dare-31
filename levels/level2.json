@@ -1,7 +1,7 @@
 {
   "type": "root_directory",
   "name": "/",
-  "offset": 1,
+  "offset": 5,
   "welcome": "welcome <USERNAME>. sometimes removing files is necessary.",
   "data": [
     {
