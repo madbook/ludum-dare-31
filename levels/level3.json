@@ -34,6 +34,10 @@
     {
       "type": "script",
       "name": "add"
+    },
+    {
+      "type": "script",
+      "name": "remove"
     }
   ]
 }

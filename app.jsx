@@ -123,7 +123,7 @@ $(function() {
         }
 
         var i = this.scriptObj.parent.listing.indexOf(this.scriptObj);
-        var newFile = { name: 'blank', type: 'file' }
+        var newFile = { name: 'blank', type: 'file', permission: 1 };
         decorateLevelData(newFile, this.directory);
         this.directory.data.splice(i, 0, newFile);
         this.directory.listing.splice(i, 0, newFile.name);
