@@ -173,6 +173,49 @@ $(function() {
       help: 'decrypt an encrypted file using a key',
     },
 
+    'encrypt': {
+      name: 'encrypt',
+      arguments: [
+        ['directory', 'vm_file', 'host_file', 'host_key', 'encryption_key', 'file', 'script'],
+      ],
+      source: function(file) {
+        if (this.directory.listing.length >= 16) {
+          this.log('directory full');
+          sfx.play('cancel');
+          return;
+        }
+
+        var keyGen = Math.pow(36, 8) - 1;
+        var keyData = Math.floor(keyGen + 1 + Math.random() * keyGen)
+                          .toString(36)
+                          .slice(1)
+                          .toUpperCase();
+        var newKey = {
+          type: 'encryption_key',
+          data: keyData,
+          name: file.name + '_key',
+          permission: 1,
+        }
+        
+        var i = file.parent.listing.indexOf(file.name);
+        delete file.parent;
+        var quoteUnquoteEncryptedData = btoa(JSON.stringify(file));
+        var encFile = {
+          name: file.name,
+          type: 'encrypted_file',
+          key_data: keyData,
+          data: quoteUnquoteEncryptedData,
+          permission: 1,
+        };
+        
+        decorateLevelData(newKey, this.directory);
+        decorateLevelData(encFile, this.directory);
+        this.directory.data.splice(i, 1, encFile, newKey);
+        this.directory.listing.splice(i, 1, encFile.name, newKey.name);
+        sfx.play('decrypt');
+      },
+    },
+
     'connect': {
       name: 'connect',
       arguments: [
