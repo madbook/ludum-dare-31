@@ -362,7 +362,37 @@ $(function() {
         this.log('created new virtual machine and key file');
         this.refresh();
       },
-    }
+    },
+
+    'push': {
+      name: 'push',
+      arguments: [],
+      source: function() {
+        var dir = this.directory;
+        while (dir) {
+          dir.offset += 1;
+          dir.offset %= 16;
+          dir = dir.parent;
+        }
+        sfx.play('move');
+        this.refresh();
+      },
+    },
+
+    'pull': {
+      name: 'pull',
+      arguments: [],
+      source: function() {
+        var dir = this.directory;
+        while (dir) {
+          dir.offset += 15;
+          dir.offset %= 16;
+          dir = dir.parent;
+        }
+        sfx.play('move');
+        this.refresh();
+      },
+    },
   };
 
 
