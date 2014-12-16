@@ -269,7 +269,6 @@ $(function() {
           permission: 1,
           data: [],
         };
-        decorateLevelData(newFile, this.directory);
 
         if (this.scriptObj.type === 'script') {
           var i = this.scriptObj.parent.listing.indexOf(this.scriptObj);
@@ -280,6 +279,7 @@ $(function() {
           this.directory.data.push(newFile);
         }
 
+        decorateLevelData(newFile, this.directory);
         sfx.play('create');
         this.log('created new directory');
         this.refresh();
