@@ -122,13 +122,18 @@ $(function() {
           return;
         }
 
-        var i = this.scriptObj.parent.listing.indexOf(this.scriptObj);
         var newFile = { name: 'blank', type: 'file', permission: 1 };
         decorateLevelData(newFile, this.directory);
-        this.directory.data.splice(i, 0, newFile);
-        this.directory.listing.splice(i, 0, newFile.name);
-        // this.directory.listing.push(newFile.name);
-        // this.directory.data.push(newFile);
+
+        if (this.scriptObj.type === 'script') {
+          var i = this.scriptObj.parent.listing.indexOf(this.scriptObj);
+          this.directory.data.splice(i, 0, newFile);
+          this.directory.listing.splice(i, 0, newFile.name);
+        } else {
+          this.directory.listing.push(newFile.name);
+          this.directory.data.push(newFile);
+        }
+
         sfx.play('create');
         this.log('created new file');
         this.refresh();
