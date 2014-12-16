@@ -355,7 +355,7 @@ $(function() {
           Shell.setShellScript(Bin.inspect, x, y);
         }
         Shell.log('$')
-      } else {
+      } else if (Shell.script.type === 'script') {
         var xOff = Math.abs(Shell.interactCell.x - x);
         var yOff = Math.abs(Shell.interactCell.y - y);
 
