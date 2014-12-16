@@ -202,7 +202,65 @@ $(function() {
         this.log('reconnecting to host');
         this.loadLevel(this.levelPath);
       },
-    }
+    },
+
+    'add_dir': {
+      name: 'add_dir',
+      arguments: [],
+      source: function() {
+        if (this.directory.listing.length >= 16) {
+          this.log('directory full');
+          sfx.play('cancel');
+          return;
+        }
+
+        var newFile = {
+          type: 'directory',
+          name: 'new_dir',
+          permission: 1,
+          data: [],
+        };
+        decorateLevelData(newFile, this.directory);
+
+        if (this.scriptObj.type === 'script') {
+          var i = this.scriptObj.parent.listing.indexOf(this.scriptObj);
+          this.directory.data.splice(i, 0, newFile);
+          this.directory.listing.splice(i, 0, newFile.name);
+        } else {
+          this.directory.listing.push(newFile.name);
+          this.directory.data.push(newFile);
+        }
+
+        sfx.play('create');
+        this.log('created new directory');
+        this.refresh();
+      }
+    },
+
+    'remove_dir': {
+      name: 'remove_dir',
+      arguments: [
+        ['directory'],
+      ],
+      source: function(directory) {
+        if (!directory.permission) {
+          this.log('permission denied');
+          sfx.play('cancel');
+          return;
+        }
+
+        var realdirectory = this.getSourceFile(directory);
+        realdirectory.parent = null;
+
+        var i = directory.parent.listing.indexOf(directory.name);
+        directory.parent.data.splice(i, 1);
+        directory.parent.listing.splice(i, 1);
+
+        directory.parent = null;
+        sfx.play('remove');
+      },
+      help: 'remove a directory and all its contents',
+    },
   };
 
 
