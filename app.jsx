@@ -60,7 +60,7 @@ $(function() {
     'move': {
       name: 'move',
       arguments: [
-        ['file', 'encryption_key', 'encrypted_file', 'host_key', 'host_file'],
+        ['file', 'encryption_key', 'encrypted_file', 'host_key', 'host_file', 'vm_file'],
         ['directory', 'linked_directory', 'linked_directory_parent']
       ],
       source: function(file, target) {
@@ -177,17 +177,23 @@ $(function() {
       name: 'connect',
       arguments: [
         ['host_key'],
-        ['host_file']
+        ['host_file', 'vm_file']
       ],
       source: function(key, host) {
-        this.log('resolving host', host.data);
-        this.log('authenticating...');
 
         if (key.data !== host.key_data) {
           sfx.play('cancel');
           this.log('incorrect key, disconnecting');
-        } else {
+        } else if (host.type === 'host_file') {
+          this.log('resolving host', host.data);
+          this.log('authenticating...');
           Shell.loadLevel(host.data);
+        } else if (host.type === 'vm_file') {
+          sfx.play('connect');
+          this.log('connecting to virtual machine...');
+          Shell.changeDirectory(host.data, host.data.welcome);
+        } else {
+          sfx.play('cancel');
         }
 
         this.refresh();
@@ -261,6 +267,59 @@ $(function() {
       },
       help: 'remove a directory and all its contents',
     },
+
+    'add_vm': {
+      name: 'add_vm',
+      arguments: [],
+      source: function() {
+        if (this.directory.listing.length >= 15) {
+          this.log('directory full');
+          sfx.play('cancel');
+          return;
+        }
+
+        var keyGen = Math.pow(36, 8) - 1;
+        var keyData = Math.floor(keyGen + 1 + Math.random() * keyGen)
+                          .toString(36)
+                          .slice(1)
+                          .toUpperCase();
+        var newVmKey = {
+          type: 'host_key',
+          data: keyData,
+          name: 'vm_key',
+        }
+        decorateLevelData(newVm, this.directory);
+        
+        var newVm = {
+          type: 'vm_file',
+          name: 'new_vm',
+          permission: 1,
+          key_data: keyData,
+          data: {
+            type: "root_directory",
+            name: "/",
+            offset: 0,
+            welcome: "welcome <USERNAME>. this is a virtual machine!",
+            data: [],
+          },
+        };
+        decorateLevelData(newVm, this.directory);
+        decorateLevelData(newVm.data, null);
+
+        if (this.scriptObj.type === 'script') {
+          var i = this.scriptObj.parent.listing.indexOf(this.scriptObj);
+          this.directory.data.splice(i, 0, newVm, newVmKey);
+          this.directory.listing.splice(i, 0, newVm.name, newVmKey.name);
+        } else {
+          this.directory.data.push(newVm, newVmKey);
+          this.directory.listing.push(newVm.name, newVmKey.name);
+        }
+
+        sfx.play('create');
+        this.log('created new virtual machine and key file');
+        this.refresh();
+      },
+    }
   };
 
 
@@ -294,10 +353,7 @@ $(function() {
       $.getJSON('levels/' + path + '.json').then(function(data) {
         Shell.log('connected!');
         decorateLevelData(data, null);
-        if (data.welcome) {
-          Shell.log('SERVER:', data.welcome);
-        }
-        Shell.changeDirectory(data);
+        Shell.changeDirectory(data, data.welcome);
       }).fail(function(err) {
         Shell.log('err! something went wrong!');
         Shell.log('this is not part of the game.  sorry!');
@@ -355,10 +411,14 @@ $(function() {
       }
     },
 
-    changeDirectory: function(directory) {
+    changeDirectory: function(directory, message) {
       Shell.clearDirectory();
       if (!directory) {
         return;
+      }
+
+      if (message) {
+        Shell.log('SERVER:', message);
       }
 
       var l = directory.data.length;
