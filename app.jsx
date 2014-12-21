@@ -160,7 +160,7 @@ $(function() {
           decorateLevelData(newFile, file.parent);
           file.parent = null;
           key = this.getSourceFile(key);
-          key.type = 'used_key';
+          key.type = 'key';
           this.log(file.name, 'decrypted to', newFile.name);
           sfx.play('decrypt');
         } catch(e) {
@@ -176,26 +176,18 @@ $(function() {
     'encrypt': {
       name: 'encrypt',
       arguments: [
+        ['key'],
         ['directory', 'vm_file', 'host_file', 'host_key', 'encryption_key', 'file', 'script'],
       ],
-      source: function(file) {
+      source: function(keyFile, file) {
         if (this.directory.listing.length >= 16) {
           this.log('directory full');
           sfx.play('cancel');
           return;
         }
 
-        var keyGen = Math.pow(36, 8) - 1;
-        var keyData = Math.floor(keyGen + 1 + Math.random() * keyGen)
-                          .toString(36)
-                          .slice(1)
-                          .toUpperCase();
-        var newKey = {
-          type: 'encryption_key',
-          data: keyData,
-          name: file.name + '_key',
-          permission: 1,
-        }
+        keyFile = this.getSourceFile(keyFile);
+        keyFile.type = 'encryption_key';
         
         var i = file.parent.listing.indexOf(file.name);
         delete file.parent;
@@ -203,15 +195,14 @@ $(function() {
         var encFile = {
           name: file.name,
           type: 'encrypted_file',
-          key_data: keyData,
+          key_data: keyFile.data,
           data: quoteUnquoteEncryptedData,
           permission: 1,
         };
         
-        decorateLevelData(newKey, this.directory);
         decorateLevelData(encFile, this.directory);
-        this.directory.data.splice(i, 1, encFile, newKey);
-        this.directory.listing.splice(i, 1, encFile.name, newKey.name);
+        this.directory.data.splice(i, 1, encFile);
+        this.directory.listing.splice(i, 1, encFile.name);
         sfx.play('decrypt');
       },
     },
@@ -313,31 +304,22 @@ $(function() {
 
     'add_vm': {
       name: 'add_vm',
-      arguments: [],
-      source: function() {
-        if (this.directory.listing.length >= 15) {
+      arguments: ['key'],
+      source: function(keyFile) {
+        if (this.directory.listing.length >= 16) {
           this.log('directory full');
           sfx.play('cancel');
           return;
         }
-
-        var keyGen = Math.pow(36, 8) - 1;
-        var keyData = Math.floor(keyGen + 1 + Math.random() * keyGen)
-                          .toString(36)
-                          .slice(1)
-                          .toUpperCase();
-        var newVmKey = {
-          type: 'host_key',
-          data: keyData,
-          name: 'vm_key',
-        }
-        decorateLevelData(newVm, this.directory);
         
+        keyFile = this.getSourceFile(keyFile);
+        keyFile.type = 'host_key';
+
         var newVm = {
           type: 'vm_file',
           name: 'new_vm',
           permission: 1,
-          key_data: keyData,
+          key_data: keyFile.data,
           data: {
             type: "root_directory",
             name: "/",
@@ -351,11 +333,11 @@ $(function() {
 
         if (this.scriptObj.type === 'script') {
           var i = this.scriptObj.parent.listing.indexOf(this.scriptObj);
-          this.directory.data.splice(i, 0, newVm, newVmKey);
-          this.directory.listing.splice(i, 0, newVm.name, newVmKey.name);
+          this.directory.data.splice(i, 0, newVm);
+          this.directory.listing.splice(i, 0, newVm.name);
         } else {
-          this.directory.data.push(newVm, newVmKey);
-          this.directory.listing.push(newVm.name, newVmKey.name);
+          this.directory.data.push(newVm);
+          this.directory.listing.push(newVm.name);
         }
 
         sfx.play('create');
@@ -390,6 +372,45 @@ $(function() {
           dir = dir.parent;
         }
         sfx.play('move');
+        this.refresh();
+      },
+    },
+
+    'add_key': {
+      name: 'add_key',
+      arguments: [],
+      source: function() {
+        if (this.directory.listing.length >= 16) {
+          this.log('directory full');
+          sfx.play('cancel');
+          return;
+        }
+
+        var keyGen = Math.pow(36, 8) - 1;
+        var keyData = Math.floor(keyGen + 1 + Math.random() * keyGen)
+                          .toString(36)
+                          .slice(1)
+                          .toUpperCase();
+        var newKey = {
+          type: 'key',
+          data: keyData,
+          name: 'key',
+          permission: 1,
+        }
+
+        decorateLevelData(newKey, this.directory);
+
+        if (this.scriptObj.type === 'script') {
+          var i = this.scriptObj.parent.listing.indexOf(this.scriptObj);
+          this.directory.data.splice(i, 0, newKey);
+          this.directory.listing.splice(i, 0, newKey.name);
+        } else {
+          this.directory.listing.push(newKey.name);
+          this.directory.data.push(newKey);
+        }
+
+        sfx.play('create');
+        this.log('generated new key');
         this.refresh();
       },
     },
