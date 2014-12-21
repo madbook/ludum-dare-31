@@ -638,8 +638,13 @@ $(function() {
 
   var Cell = React.createClass({
     render: function() {
-
-      return <a className={'cell ' + this.props.type + (this.props.selected ? ' selected' : '')}
+      var cellClasses = [
+        'cell',
+        this.props.type,
+        this.props.name || '',
+        this.props.selected ? 'selected' : '',
+      ];
+      return <a className={cellClasses.join(' ')}
                 onClick={this.handleClick}>
         <canvas className="cell-contents" width="100" height="100" />
         <div className="cell-icon" />
