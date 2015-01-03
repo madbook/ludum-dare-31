@@ -111,13 +111,13 @@ $(function() {
           target = target.link;
         }
           
-        var i = file.parent.listing.indexOf(file.name);
+        var i = file.parent.listing.indexOf(file.id36);
 
         file.parent.data.splice(i, 1);
         file.parent.listing.splice(i, 1);
         file.parent = target;
         target.data.push(file);
-        target.listing.push(file.name);
+        target.listing.push(file.id36);
         sfx.play('move');
         this.refresh();
       },
@@ -139,7 +139,7 @@ $(function() {
         var realFile = this.getSourceFile(file);
         realFile.parent = null;
         
-        var i = file.parent.listing.indexOf(file.name);
+        var i = file.parent.listing.indexOf(file.id36);
         file.parent.data.splice(i, 1);
         file.parent.listing.splice(i, 1);
 
@@ -165,9 +165,9 @@ $(function() {
         if (this.scriptObj.type === 'script') {
           var i = this.scriptObj.parent.listing.indexOf(this.scriptObj);
           this.directory.data.splice(i, 0, newFile);
-          this.directory.listing.splice(i, 0, newFile.name);
+          this.directory.listing.splice(i, 0, newFile.id36);
         } else {
-          this.directory.listing.push(newFile.name);
+          this.directory.listing.push(newFile.id36);
           this.directory.data.push(newFile);
         }
 
@@ -184,7 +184,7 @@ $(function() {
         ['encrypted_file']
       ],
       source: function(key, file) {
-        var i = file.parent.listing.indexOf(file.name);
+        var i = file.parent.listing.indexOf(file.id36);
         file = file.parent.data[i];
         
         this.log('decrypting', file.name);
@@ -226,7 +226,7 @@ $(function() {
         keyFile = this.getSourceFile(keyFile);
         keyFile.type = 'encryption_key';
         
-        var i = file.parent.listing.indexOf(file.name);
+        var i = file.parent.listing.indexOf(file.id36);
         delete file.parent;
         var quoteUnquoteEncryptedData = btoa(JSON.stringify(file));
         var encFile = {
@@ -239,7 +239,7 @@ $(function() {
         
         decorateLevelData(encFile, this.directory);
         this.directory.data.splice(i, 1, encFile);
-        this.directory.listing.splice(i, 1, encFile.name);
+        this.directory.listing.splice(i, 1, encFile.id36);
         sfx.play('decrypt');
       },
     },
@@ -301,9 +301,9 @@ $(function() {
         if (this.scriptObj.type === 'script') {
           var i = this.scriptObj.parent.listing.indexOf(this.scriptObj);
           this.directory.data.splice(i, 0, newFile);
-          this.directory.listing.splice(i, 0, newFile.name);
+          this.directory.listing.splice(i, 0, newFile.id36);
         } else {
-          this.directory.listing.push(newFile.name);
+          this.directory.listing.push(newFile.id36);
           this.directory.data.push(newFile);
         }
 
@@ -329,7 +329,7 @@ $(function() {
         var realdirectory = this.getSourceFile(directory);
         realdirectory.parent = null;
 
-        var i = directory.parent.listing.indexOf(directory.name);
+        var i = directory.parent.listing.indexOf(directory.id36);
         directory.parent.data.splice(i, 1);
         directory.parent.listing.splice(i, 1);
 
@@ -371,10 +371,10 @@ $(function() {
         if (this.scriptObj.type === 'script') {
           var i = this.scriptObj.parent.listing.indexOf(this.scriptObj);
           this.directory.data.splice(i, 0, newVm);
-          this.directory.listing.splice(i, 0, newVm.name);
+          this.directory.listing.splice(i, 0, newVm.id36);
         } else {
           this.directory.data.push(newVm);
-          this.directory.listing.push(newVm.name);
+          this.directory.listing.push(newVm.id36);
         }
 
         sfx.play('create');
@@ -437,9 +437,9 @@ $(function() {
         if (this.scriptObj.type === 'script') {
           var i = this.scriptObj.parent.listing.indexOf(this.scriptObj);
           this.directory.data.splice(i, 0, newKey);
-          this.directory.listing.splice(i, 0, newKey.name);
+          this.directory.listing.splice(i, 0, newKey.id36);
         } else {
-          this.directory.listing.push(newKey.name);
+          this.directory.listing.push(newKey.id36);
           this.directory.data.push(newKey);
         }
 
@@ -504,7 +504,7 @@ $(function() {
     scriptParams: [],
 
     getSourceFile: function(file) {
-      var i = file.parent.listing.indexOf(file.name);
+      var i = file.parent.listing.indexOf(file.id36);
       return file.parent.data[i];
     },
 
@@ -760,9 +760,16 @@ $(function() {
     },
   });
 
+  var nextId = 0;
+
   function decorateLevelData(data, parent) {
     if (!data) {
       return;
+    }
+
+    if (!data.id36) {
+      data.id36 = nextId.toString(36);
+      nextId += 1;
     }
 
     if (parent && !data.parent) {
@@ -790,13 +797,13 @@ $(function() {
     }
 
     if (data.type === 'directory' || data.type === 'root_directory') {
-      data.listing = data.data.map(function(child) {
-        return child ? child.name : null;
-      });
-
       // call recursively
       data.data.forEach(function(child) {
         decorateLevelData(child, data);
+      });
+
+      data.listing = data.data.map(function(child) {
+        return child ? child.id36 : null;
       });
     }
   }
