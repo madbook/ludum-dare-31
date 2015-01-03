@@ -26,6 +26,28 @@ $(function() {
     blankBoard.push(1);
   }
 
+  var defaultUserScripts = [
+    { type: 'user_script', name: 'reload' },
+  ];
+
+  var consoleUserScripts = [
+    { type: 'user_script', name: 'reload' },
+    { type: 'user_script', name: 'console' },
+    { type: 'user_script', name: 'connect' },
+    { type: 'user_script', name: 'move' },
+    { type: 'user_script', name: 'decrypt' },
+    { type: 'user_script', name: 'add' },
+    { type: 'user_script', name: 'remove' },
+    { type: 'user_script', name: 'add_dir' },
+    { type: 'user_script', name: 'remove_dir' },
+    { type: 'user_script', name: 'encrypt' },
+    { type: 'user_script', name: 'add_vm' },
+    { type: 'user_script', name: 'add_key' },
+    { type: 'user_script', name: 'push' },
+    { type: 'user_script', name: 'pull' }
+  ];
+
+
   var Bin = {
     'inspect': {
       name: 'inspect',
@@ -414,6 +436,35 @@ $(function() {
         this.refresh();
       },
     },
+
+    'console': {
+      name: 'console',
+      arguments: [],
+      source: function() {
+        sfx.play('cd');
+
+        if (this.showingConsole) {
+          this.userScripts = defaultUserScripts;
+          this.log('console deactivated');
+        } else {
+          this.userScripts = consoleUserScripts;
+          this.log('console activated');
+        }
+
+        this.showingConsole = !this.showingConsole;
+        this.refresh();
+      },
+    },
+  };
+
+
+  window.enableConsole = function() {
+    defaultUserScripts.push(
+      { type: 'user_script', name: 'console' }
+    );
+    Shell.log('console enabled');
+    sfx.play('move');
+    Shell.refresh();
   };
 
 
@@ -427,6 +478,12 @@ $(function() {
     listing: blankBoard.slice(),
 
     script: null,
+
+    showingConsole: false,
+
+    consoleEnabled: false,
+
+    userScripts: defaultUserScripts,
 
     interactCell: { x: null, y: null },
 
@@ -626,15 +683,12 @@ $(function() {
     },
   }
 
-  var userScripts = [
-    { type: 'user_script', name: 'reload' },
-  ];
-
   var App = React.createClass({
     getInitialState: function() {
       return {
         activeBoard: blankBoard.slice(),
         activeDirectory: this.props.levelData || null,
+        userScripts: defaultUserScripts,
       };
     },
     
@@ -645,7 +699,7 @@ $(function() {
 
     render: function() {
       return <div className="screen">
-        <Board className="user-scripts" cells={userScripts} />
+        <Board className="user-scripts" cells={this.state.userScripts} />
         <Board className="shell" cells={this.state.activeBoard} />
       </div>
     },
@@ -653,6 +707,7 @@ $(function() {
     onShellDirectoryChange: function() {
       this.setState({
         activeBoard: Shell.listing,
+        userScripts: Shell.userScripts,
       });
     },
   });
