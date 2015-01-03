@@ -48,6 +48,21 @@ $(function() {
   ];
 
 
+  function generateKey(length) {
+    length = length || 8;
+    if (length > 8) {
+      return generateKey(length % 8) + generateKey(length - 8);
+    } else {
+      var keyGen = Math.pow(36, length) - 1;
+      var keyData = Math.floor(keyGen + 1 + Math.random() * keyGen)
+                        .toString(36)
+                        .slice(1)
+                        .toUpperCase();
+      return keyData;
+    }
+  };
+
+
   var Bin = {
     'inspect': {
       name: 'inspect',
@@ -408,11 +423,8 @@ $(function() {
           return;
         }
 
-        var keyGen = Math.pow(36, 8) - 1;
-        var keyData = Math.floor(keyGen + 1 + Math.random() * keyGen)
-                          .toString(36)
-                          .slice(1)
-                          .toUpperCase();
+        var keyData = generateKey(8);
+
         var newKey = {
           type: 'key',
           data: keyData,
